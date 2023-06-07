@@ -273,7 +273,7 @@
 
             // 버튼 클릭 이벤트 처리
             button.addEventListener("click", function() {
-                alert("버튼이 클릭되었습니다!");
+                printResult();
             });
 
             var container = document.getElementById("questionContainer"); // 버튼이 추가될 컨테이너 요소
@@ -342,11 +342,6 @@
                     choiceInput.type = "radio";
                     choiceInput.name = "question" + i;
                     choiceInput.value = j;
-                    choiceInput.addEventListener("click", (function (qIndex, cIndex) {
-                        return function () {
-                            selectAnswer(qIndex, cIndex);
-                        };
-                    })(i, j));
 
                     // var choiceCell = document.createElement("td");
                     // choiceCell.appendChild(choiceInput);
