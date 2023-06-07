@@ -54,13 +54,6 @@
             background-position: center;
             background-size: cover;
         }
-        table {
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-        }        
     </style>
     <script>
         // 질문과 각 선택지에 대한 정보를 배열로 정의합니다.
@@ -113,102 +106,102 @@
                 { text: "완벽주의자" , value: "C" },
                 { text: "인심 좋은" , value: "S" },
             ] },            
-            // { question: "질문 9", choices: [
-            //     { text: "변화가 많은" , value: "I" },
-            //     { text: "수줍음을 타는" , value: "C" },
-            //     { text: "느긋한" , value: "S" },
-            //     { text: "완고한" , value: "D" },
-            // ] },
-            // { question: "질문 10", choices: [
-            //     { text: "체계적인" , value: "C" },
-            //     { text: "낙관적인" , value: "I" },
-            //     { text: "의지가 강한" , value: "D" },
-            //     { text: "친절한" , value: "S" },
-            // ] },
-            // { question: "질문 11", choices: [
-            //     { text: "엄격한" , value: "D" },
-            //     { text: "겸손한" , value: "C" },
-            //     { text: "상냥한" , value: "S" },
-            //     { text: "말주변이 좋은" , value: "I" }, 
-            // ] },
-            // { question: "질문 12", choices: [
-            //     { text: "호의적인" , value: "S" },
-            //     { text: "빈틈없는" , value: "C" },
-            //     { text: "놀기 좋아하는" , value: "I" },
-            //     { text: "의지가 강한" , value: "I" },
-            // ] },
-            // { question: "질문 13", choices: [
-            //     { text: "참신한" , value: "I" },
-            //     { text: "모험적인" , value: "D" },
-            //     { text: "절제된" , value: "C" },
-            //     { text: "신중한" , value: "S" },
-            // ] },
-            // { question: "질문 14", choices: [
-            //     { text: "참는" , value: "C" },
-            //     { text: "성실한" , value: "S" },
-            //     { text: "공격적인" , value: "D" },
-            //     { text: "매력 있는" , value: "I" },
-            // ] },
-            // { question: "질문 15", choices: [
-            //     { text: "열정적인" , value: "I" },
-            //     { text: "분석적인" , value: "C" },
-            //     { text: "동정심이 많은" , value: "S" },
-            //     { text: "단호한" , value: "D" },
-            // ] },
-            // { question: "질문 16", choices: [
-            //     { text: "지도력 있는" , value: "D" },
-            //     { text: "충동적인" , value: "I" },
-            //     { text: "느린" , value: "S" },
-            //     { text: "비판적인" , value: "C" },
-            // ] },
-            // { question: "질문 17", choices: [
-            //     { text: "일관성 있는" , value: "C" },
-            //     { text: "영향력 있는" , value: "D" },
-            //     { text: "생기 있는" , value: "I" },
-            //     { text: "느긋한" , value: "S" },
-            // ] },
-            // { question: "질문 18", choices: [
-            //     { text: "유력한" , value: "I" },
-            //     { text: "친절한" , value: "S" },
-            //     { text: "독립적인" , value: "D" },
-            //     { text: "정돈된" , value: "C" },
-            // ] },
-            // { question: "질문 19", choices: [
-            //     { text: "이상주의적인" , value: "C" },
-            //     { text: "평판이 좋은" , value: "I" },
-            //     { text: "쾌활한" , value: "S" },
-            //     { text: "솔직한" , value: "D" },
-            // ] },
-            // { question: "질문 20", choices: [
-            //     { text: "참을성 없는" , value: "D" },
-            //     { text: "진지한" , value: "C" },
-            //     { text: "미루는" , value: "S" },
-            //     { text: "감성적인" , value: "I" },
-            // ] },
-            // { question: "질문 21", choices: [
-            //     { text: "경쟁심이 있는" , value: "D" },
-            //     { text: "자발적인" , value: "I" },
-            //     { text: "충성스러운" , value: "S" },
-            //     { text: "사려 깊은" , value: "C" },
-            // ] },
-            // { question: "질문 22", choices: [
-            //     { text: "희생적인" , value: "C" },
-            //     { text: "이해심 많은" , value: "S" },
-            //     { text: "설득력 있는" , value: "I" },
-            //     { text: "용기 있는" , value: "D" },
-            // ] },
-            // { question: "질문 23", choices: [
-            //     { text: "의존적인" , value: "S" },
-            //     { text: "변덕스러운" , value: "I" },
-            //     { text: "절제력 있는" , value: "C" },
-            //     { text: "밀어붙이는" , value: "D" },
-            // ] },        
-            // { question: "질문 24", choices: [
-            //     { text: "포용력 있는" , value: "S" }, 
-            //     { text: "전통적인" , value: "C" },
-            //     { text: "사람을 부추기는" , value: "I" },
-            //     { text: "이끌어가는" ,value: "D" },
-            // ] },        
+            { question: "질문 9", choices: [
+                { text: "변화가 많은" , value: "I" },
+                { text: "수줍음을 타는" , value: "C" },
+                { text: "느긋한" , value: "S" },
+                { text: "완고한" , value: "D" },
+            ] },
+            { question: "질문 10", choices: [
+                { text: "체계적인" , value: "C" },
+                { text: "낙관적인" , value: "I" },
+                { text: "의지가 강한" , value: "D" },
+                { text: "친절한" , value: "S" },
+            ] },
+            { question: "질문 11", choices: [
+                { text: "엄격한" , value: "D" },
+                { text: "겸손한" , value: "C" },
+                { text: "상냥한" , value: "S" },
+                { text: "말주변이 좋은" , value: "I" }, 
+            ] },
+            { question: "질문 12", choices: [
+                { text: "호의적인" , value: "S" },
+                { text: "빈틈없는" , value: "C" },
+                { text: "놀기 좋아하는" , value: "I" },
+                { text: "의지가 강한" , value: "I" },
+            ] },
+            { question: "질문 13", choices: [
+                { text: "참신한" , value: "I" },
+                { text: "모험적인" , value: "D" },
+                { text: "절제된" , value: "C" },
+                { text: "신중한" , value: "S" },
+            ] },
+            { question: "질문 14", choices: [
+                { text: "참는" , value: "C" },
+                { text: "성실한" , value: "S" },
+                { text: "공격적인" , value: "D" },
+                { text: "매력 있는" , value: "I" },
+            ] },
+            { question: "질문 15", choices: [
+                { text: "열정적인" , value: "I" },
+                { text: "분석적인" , value: "C" },
+                { text: "동정심이 많은" , value: "S" },
+                { text: "단호한" , value: "D" },
+            ] },
+            { question: "질문 16", choices: [
+                { text: "지도력 있는" , value: "D" },
+                { text: "충동적인" , value: "I" },
+                { text: "느린" , value: "S" },
+                { text: "비판적인" , value: "C" },
+            ] },
+            { question: "질문 17", choices: [
+                { text: "일관성 있는" , value: "C" },
+                { text: "영향력 있는" , value: "D" },
+                { text: "생기 있는" , value: "I" },
+                { text: "느긋한" , value: "S" },
+            ] },
+            { question: "질문 18", choices: [
+                { text: "유력한" , value: "I" },
+                { text: "친절한" , value: "S" },
+                { text: "독립적인" , value: "D" },
+                { text: "정돈된" , value: "C" },
+            ] },
+            { question: "질문 19", choices: [
+                { text: "이상주의적인" , value: "C" },
+                { text: "평판이 좋은" , value: "I" },
+                { text: "쾌활한" , value: "S" },
+                { text: "솔직한" , value: "D" },
+            ] },
+            { question: "질문 20", choices: [
+                { text: "참을성 없는" , value: "D" },
+                { text: "진지한" , value: "C" },
+                { text: "미루는" , value: "S" },
+                { text: "감성적인" , value: "I" },
+            ] },
+            { question: "질문 21", choices: [
+                { text: "경쟁심이 있는" , value: "D" },
+                { text: "자발적인" , value: "I" },
+                { text: "충성스러운" , value: "S" },
+                { text: "사려 깊은" , value: "C" },
+            ] },
+            { question: "질문 22", choices: [
+                { text: "희생적인" , value: "C" },
+                { text: "이해심 많은" , value: "S" },
+                { text: "설득력 있는" , value: "I" },
+                { text: "용기 있는" , value: "D" },
+            ] },
+            { question: "질문 23", choices: [
+                { text: "의존적인" , value: "S" },
+                { text: "변덕스러운" , value: "I" },
+                { text: "절제력 있는" , value: "C" },
+                { text: "밀어붙이는" , value: "D" },
+            ] },        
+            { question: "질문 24", choices: [
+                { text: "포용력 있는" , value: "S" }, 
+                { text: "전통적인" , value: "C" },
+                { text: "사람을 부추기는" , value: "I" },
+                { text: "이끌어가는" ,value: "D" },
+            ] },        
         ];
 
         //var userAnswers = [];
@@ -273,6 +266,20 @@
             return scoreCounts;
         }
 
+            // 버튼을 생성하는 함수
+        function printButton() {
+            var button = document.createElement("button"); // <button> 요소 생성
+            button.innerHTML = "결과전체조회"; // 버튼 텍스트 설정
+
+            // 버튼 클릭 이벤트 처리
+            button.addEventListener("click", function() {
+                alert("버튼이 클릭되었습니다!");
+            });
+
+            var container = document.getElementById("questionContainer"); // 버튼이 추가될 컨테이너 요소
+            container.appendChild(button); // 버튼을 컨테이너에 추가
+        }
+
         function displayResult() {
             var scoreCounts = calculateScore();
             restartTest();
@@ -317,20 +324,6 @@
 
             resultContainer.appendChild(resultTable);
             printButton();
-        }
-
-
-        // 버튼을 생성하는 함수
-        function printButton() {
-            var button = document.createElement("button"); // <button> 요소 생성
-            button.innerHTML = "결과전체조회"; // 버튼 텍스트 설정
-
-            // 버튼 클릭 이벤트 처리
-            button.addEventListener("click", function() {
-                printResult();
-            });
-            var container = document.getElementById("questionContainer"); // 버튼이 추가될 컨테이너 요소
-            container.appendChild(button); // 버튼을 컨테이너에 추가
         }
 
         function printResult() {
