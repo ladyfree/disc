@@ -10,6 +10,8 @@
 
     <title>DISC 행동유형 검사</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
 
         #player_name {
@@ -22,9 +24,8 @@
         .choice-button {
             width: 500px;
         }
-        .table-bordered tbody td:hover {
-            background-color: #015da8;
-        }
+
+
         .head {
             display: flex;
         }
@@ -42,7 +43,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: right;
-            padding: 2px 2px 0px 85%;
+            padding: 2px 2px 2px 85%;
         }
 
         .disc_profile
@@ -53,6 +54,11 @@
             background-image: url('disc.png');
             background-position: center;
             background-size: cover;
+        }
+
+        .table table-border
+        {
+
         }
     </style>
     <script>
@@ -266,25 +272,12 @@
             return scoreCounts;
         }
 
-            // 버튼을 생성하는 함수
-        function printButton() {
-            var button = document.createElement("button"); // <button> 요소 생성
-            button.innerHTML = "결과전체조회"; // 버튼 텍스트 설정
-
-            // 버튼 클릭 이벤트 처리
-            button.addEventListener("click", function() {
-                printResult();
-            });
-
-            var container = document.getElementById("questionContainer"); // 버튼이 추가될 컨테이너 요소
-            container.appendChild(button); // 버튼을 컨테이너에 추가
-        }
-
         function displayResult() {
             var scoreCounts = calculateScore();
-            restartTest();
-            var resultContainer = document.getElementById("questionContainer");
-            resultContainer.innerHTML = ""; // 기존 내용을 초기화합니다.
+            //restartTest();
+            var questionContainer = document.getElementById("questionContainer");
+            questionContainer.innerHTML = ""; // 기존 내용을 초기화합니다.
+            var resultContainer = document.getElementById("resultContainer");
 
             var resultTable = document.createElement("table");
             resultTable.classList.add("table", "table-bordered");
@@ -326,36 +319,89 @@
             printButton();
         }
 
+        // 버튼을 생성하는 함수
+        function printButton() {
+            var button = document.createElement("button"); // <button> 요소 생성
+            button.innerHTML = "선택목록 조회"; // 버튼 텍스트 설정
+
+            // 버튼 클릭 이벤트 처리
+            button.addEventListener("click", function() {
+                printResult();
+            });
+
+            var container = document.getElementById("prtContainer"); // 버튼이 추가될 컨테이너 요소
+            container.appendChild(button); // 버튼을 컨테이너에 추가
+        }
+
         function printResult() {
             // 질문과 선택지를 HTML 테이블의 행과 셀로 동적으로 추가합니다.
-            var questionContainer = document.getElementById("questionContainer");
+            var prtContainer = document.getElementById("prtContainer");
+
+            prtContainer.innerHTML = ""; //
+            var resultTable = document.createElement("table");
+            resultTable.classList.add("table", "table-bordered");
+
+            //var thead = document.createElement("thead");
+            var titleRow = document.createElement("tr");
+            var titleCell = document.createElement("th");
+            titleCell.textContent = "전체결과";
+            titleRow.appendChild(titleCell);
+            var titleCell1 = document.createElement("th");
+            titleCell1.textContent = "A";
+            titleRow.appendChild(titleCell1);            
+            var titleCell2 = document.createElement("th");
+            titleCell2.textContent = "B";
+            titleRow.appendChild(titleCell2);            
+            var titleCell3 = document.createElement("th");
+            titleCell3.textContent = "C";
+            titleRow.appendChild(titleCell3);            
+            var titleCell4 = document.createElement("th");
+            titleCell4.textContent = "D";
+            titleRow.appendChild(titleCell4);            
+            resultTable.appendChild(titleRow);
+            prtContainer.appendChild(resultTable);
+
+            var tbody = document.createElement("tbody");
             for (var i = 0; i < questions.length; i++) {
                 var question = questions[i];
+                var answer = userAnswers[i];
                 var row = document.createElement("tr");
 
                 var questionCell = document.createElement("td");
                 questionCell.textContent = question.question;
                 row.appendChild(questionCell);
-
+                
                 for (var j = 0; j < question.choices.length; j++) {
                     var choiceInput = document.createElement("input");
-                    choiceInput.type = "radio";
+                    choiceInput.type = "checkbox";
                     choiceInput.name = "question" + i;
-                    choiceInput.value = j;
+                    choiceInput.value = question.choices[j].value;
+                    if( choiceInput.value == answer){
+                        choiceInput.checked = true;
+                    }
+                    choiceInput.disabled = true;
 
-                    // var choiceCell = document.createElement("td");
-                    // choiceCell.appendChild(choiceInput);
                     var choiceCell = document.createElement("td");
                     row.appendChild(choiceCell);
                     var choiceLabel = document.createElement("label");
                     choiceLabel.appendChild(choiceInput);
+                    // if( choiceInput.value == answer){
+                    //     var chk = document.createElement("i");
+                    //     chk.classList.add("i", "fa fa-check");
+                    //     choiceLabel.appendChild(chk);
+                    // }
+
                     choiceLabel.appendChild(document.createTextNode(question.choices[j].text));
+                    // choiceLabel.appendChild(document.createTextNode(choiceInput.value));
 
                     choiceCell.appendChild(choiceLabel);
                     row.appendChild(choiceCell);
                 }
-                questionContainer.appendChild(row);
+                tbody.appendChild(row);
+                resultTable.appendChild(tbody);
+                prtContainer.appendChild(resultTable);
             }
+            
         }
     </script>
 </head>
@@ -381,6 +427,7 @@
                 <button onclick="closeWidget()"> 닫기 </button>
             </div>             
         </div> 
+        <div id="prtContainer" class="prt-container"></div>
     </div>
 
     <script>
@@ -398,18 +445,21 @@
             displayQuestion();
             var resultContainer = document.getElementById("resultContainer");
             resultContainer.innerHTML = "";
+            var prtContainer = document.getElementById("prtContainer");
+            prtContainer.innerHTML = "";
             var restartButtonContainer = document.getElementById("restartButtonContainer");
             //restartButtonContainer.style.display = "none";
         };
         
         function closeWidget() {
-            // App으로 메시지를 보냄.
-            let _type = "close"
-            window.parent.postMessage(
-                {type: _type ,},
-                //"close",
-                "*"
-            );
+            // // App으로 메시지를 보냄.
+            // let _type = "close"
+            // window.parent.postMessage(
+            //     {type: _type ,},
+            //     //"close",
+            //     "*"
+            // );
+            window.close();
         };
     </script>
 </body>
