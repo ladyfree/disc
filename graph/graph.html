@@ -19,9 +19,6 @@
         /* padding : 10px; */
         justify-content: left;
     }
-    .input-group-text{
-      width : 160px;
-    }
 
     table, tr, th{
       border: 1px solid black;
@@ -31,22 +28,25 @@
     canvas {
       border: 1px solid black;
     }
+    .colD,  .colI,  .colS,  .colC{
+        width : 70px;
+    }
   </style>
 </head>
 <body>
     <div>
         <div class="input-container">
-        <h3>관계 그래프</h3>
+            <h3>관계 그래프</h3>
         </div>
         <div class="input-container">
-        <table id="inputTable">
+        <table id="inputTable" width="500px">
             <thead>
                 <tr>
                     <th>점수 입력</th>
-                    <th class="col">D 주도성</th>
-                    <th class="col">I 사교성</th>
-                    <th class="col">S 안정성</th>
-                    <th class="col">C 신중성</th>
+                    <th class="col" width="70px">D 주도성</th>
+                    <th class="col" width="70px">I 사교성</th>
+                    <th class="col" width="70px">S 안정성</th>
+                    <th class="col" width="70px">C 신중성</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,8 +69,8 @@
         </div>
         <div class="input-container">
             <div class="container">
-            <button class="btn btn-primary" onclick="drawGraph()">그리기</button>
-            <button class="btn btn-primary" onclick="drawFrame()">지우기</button>
+                <button class="btn btn-primary" onclick="drawGraph()">그리기</button>
+                <button class="btn btn-primary" onclick="drawFrame()">지우기</button>
             </div>
         </div>        
         <div class="input-container">
