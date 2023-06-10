@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+    .input-container
+    {
+        display: flex;
+        padding : 5px;
+        justify-content: center;
+    }
+    .container
+    {
+        width : 500px;
+        /* padding : 10px; */
+        justify-content: left;
+    }
+    .input-group-text{
+      width : 160px;
+    }
+
+    table, tr, th{
+      border: 1px solid black;
+      text-align: center;
+    }
+
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+    <div>
+        <div class="input-container">
+        <h3>관계 그래프</h3>
+        </div>
+        <div class="input-container">
+        <table id="inputTable">
+            <thead>
+                <tr>
+                    <th>점수 입력</th>
+                    <th class="col">D 주도성</th>
+                    <th class="col">I 사교성</th>
+                    <th class="col">S 안정성</th>
+                    <th class="col">C 신중성</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>나 </td>
+                    <td><input type="number" class="colD"></td>
+                    <td><input type="number" class="colI"></td>
+                    <td><input type="number" class="colS"></td>
+                    <td><input type="number" class="colC"></td>
+                </tr>
+                <tr>
+                    <td>상대방</td>
+                    <td><input type="number" class="colD"></td>
+                    <td><input type="number" class="colI"></td>
+                    <td><input type="number" class="colS"></td>
+                    <td><input type="number" class="colC"></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="input-container">
+            <div class="container">
+            <button class="btn btn-primary" onclick="drawGraph()">그리기</button>
+            <button class="btn btn-primary" onclick="drawFrame()">지우기</button>
+            </div>
+        </div>        
+        <div class="input-container">
+            <canvas id="graphCanvas" width="500" height="500"></canvas>
+        </div>
+    </div>
+
+    <script>
+    const colDInputs = document.getElementsByClassName("colD");
+    const colIInputs = document.getElementsByClassName("colI");
+    const colSInputs = document.getElementsByClassName("colS");
+    const colCInputs = document.getElementsByClassName("colC");
+
+    // 입력값을 저장할 변수 배열
+    let cols = [];
+
+    // 입력값 변경 시 변수 배열 업데이트
+    for (let i = 0; i < colDInputs.length; i++) {
+        colDInputs[i].addEventListener("input", updateCols);
+        colIInputs[i].addEventListener("input", updateCols);
+        colSInputs[i].addEventListener("input", updateCols);
+        colCInputs[i].addEventListener("input", updateCols);
+    }
+
+    function updateCols() {
+        cols = [];
+        for (let i = 0; i < colDInputs.length; i++) {
+            const colDValue = parseFloat(colDInputs[i].value);
+            const colIValue = parseFloat(colIInputs[i].value);
+            const colSValue = parseFloat(colSInputs[i].value);
+            const colCValue = parseFloat(colCInputs[i].value);
+            cols.push([colDValue, colIValue, colSValue, colCValue]);
+        }
+        console.log(cols);
+    }
+    
+    // frame 그리기
+    function drawFrame() {
+        const canvas = document.getElementById("graphCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // 그래프의 크기와 중심 좌표 설정
+        const graphSize = Math.min(canvas.width, canvas.height) * 0.9;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const maxUnit = 20;
+        const graphUnit = graphSize/(maxUnit*2);
+
+        // 그래프 그리기
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+
+        // x축 그리기
+        ctx.beginPath();
+        ctx.moveTo(0, centerY);
+        ctx.lineTo(canvas.width, centerY);
+        ctx.stroke();
+
+        // y축 그리기
+        ctx.beginPath();
+        ctx.moveTo(centerX, 0);
+        ctx.lineTo(centerX, canvas.height);
+        ctx.stroke();
+
+        // x축 레이블 그리기
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        for (let i = 2; i <= maxUnit; i += 2) {
+            const labelX1 = centerX + i * graphUnit;
+            ctx.fillText(i.toString(), labelX1, centerY + 12);
+            const labelX2 = centerX - i * graphUnit;
+            ctx.fillText(i.toString(), labelX2, centerY + 12);
+        }
+
+        // y축 레이블 그리기
+        ctx.textAlign = "right";
+        for (let i = 2; i <= maxUnit; i += 2) {
+            const labelY1 = centerY - i * graphUnit;
+            ctx.fillText(i.toString(), centerX - 8, labelY1 + 4);
+            const labelY2 = centerY + i * graphUnit;
+            ctx.fillText(i.toString(), centerX - 8, labelY2 + 4);
+        }
+
+        // 4분면 쓰기
+        ctx.fillStyle = "violet";
+        ctx.fillText(`D`, centerX - graphUnit*(maxUnit-2), centerY - graphUnit* (maxUnit-2));
+        ctx.fillText(`I`, centerX + graphUnit*(maxUnit-2), centerY - graphUnit* (maxUnit-2));
+        ctx.fillText(`S`, centerX + graphUnit*(maxUnit-2), centerY + graphUnit* (maxUnit-2));
+        ctx.fillText(`C`, centerX - graphUnit*(maxUnit-2), centerY + graphUnit* (maxUnit-2));
+
+    }
+
+    function drawLine(score1, score2, score3, score4, color) {
+        const canvas = document.getElementById("graphCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // 그래프의 크기와 중심 좌표 설정
+        const graphSize = Math.min(canvas.width, canvas.height) * 0.9;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const maxUnit = 20;
+        const graphUnit = graphSize/(maxUnit*2);
+
+        // 점의 위치 계산
+        const pointX = [
+            centerX - score1 * graphUnit,
+            centerX + score2 * graphUnit,
+            centerX + score3 * graphUnit,
+            centerX - score4 * graphUnit,
+        ];
+        const pointY = [
+            centerY - score1 * graphUnit,
+            centerY - score2 * graphUnit,
+            centerY + score3 * graphUnit,
+            centerY + score4 * graphUnit,
+        ];
+
+        // 점 그리기
+        ctx.fillStyle = color;
+        for (let i = 0; i < 4; i++) {
+            ctx.beginPath();
+            ctx.arc(pointX[i], pointY[i], 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        // 점을 선으로 연결하기
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(pointX[0], pointY[0]);
+        ctx.lineTo(pointX[1], pointY[1]);
+        ctx.lineTo(pointX[2], pointY[2]);
+        ctx.lineTo(pointX[3], pointY[3]);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function drawGraph(){
+
+        // 기본틀만 그리기
+        drawFrame();
+
+        //나의 점수 그려주기
+        if(isNaN(cols[0][0])){
+            alert("나의 'D 주도성' 점수를 입력해주세요");
+            return;
+        }
+        if(isNaN(cols[0][1])){
+            alert("나의 'I 사교성' 점수를 입력해주세요");
+            return;
+        }
+        if(isNaN(cols[0][2])){
+            alert("나의 'S 안정성' 점수를 입력해주세요");
+            return;
+        }
+        if(isNaN(cols[0][3])){
+            alert("나의 'C 신중성' 점수를 입력해주세요");
+            return;
+        }
+        drawLine(cols[0][0], cols[0][1], cols[0][2], cols[0][3], "blue");
+
+        // 상대방 점수 그려주기
+        if(isNaN(cols[1][0])){
+            alert("상대방의 'D 주도성' 점수를 입력해주세요");
+            return;
+        }
+        if(isNaN(cols[1][1])){
+            alert("상대방의 'I 사교성' 점수를 입력해주세요");
+            return;
+        }
+        if(isNaN(cols[1][2])){
+            alert("상대방의 'S 안정성' 점수를 입력해주세요");
+            return;
+        }
+        if(isNaN(cols[1][3])){
+            alert("상대방의 'C 신중성' 점수를 입력해주세요");
+            return;
+        }
+        drawLine(cols[1][0], cols[1][1], cols[1][2], cols[1][3], "red");
+    }
+
+    drawFrame();
+
+  </script>
+</body>
+</html>
