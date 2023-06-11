@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>욕구강도 프로파일</title>
+    <style>
+        .container{
+            /* padding : 0px,0px,2px,10px; */
+            /* display: flex; */
+            align-items: center;
+            padding : 5px;
+        }
+        .question-Container{
+            margin-bottom: 5px;
+        }
+
+        .Close-Container{
+            display: flex;
+            /* padding : 0px,0px,2px,10px; */
+            justify-content: end;
+        }
+
+        label {
+            display: block;
+            position: relative;
+            /* padding-left: 28px; */
+            cursor: pointer;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            /* padding: 8px; */
+            text-align: center;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 항목 이름
+        const labels = ['생존','사랑/소속', '힘/성취', '자유', '즐거움'];
+        var myScore    = [0,0,0,0,0];
+        var OtherScore = [0,0,0,0,0];
+        var choices    = [5,4,3,2,1];
+        var panelIndex = 0;
+        var chart; // Chart 객체 저장 변수
+    
+        function selectAnswer(questionIndex, choiceIndex, idx, questions) {
+            console.log(`questionIndex : ${questionIndex} in selectAnswer()` );
+            console.log(`choiceIndex : ${choiceIndex} in selectAnswer()` );
+            console.log(`idx : ${idx} in selectAnswer()` );
+
+            // 선택한 답변의 알파벳 값을 해당 질문의 답변으로 저장합니다.
+            var choiceValue = choices[choiceIndex];
+
+            console.log(`choiceValue :${choiceValue}, myVal :${questions[questionIndex].myVal}, OtherVal :${questions[questionIndex].OtherVal}` );
+            // 사용자의 답변 배열을 순회하며 선택한 score를 합산합니다.           
+            if(idx == 1){  // 내 점수
+                questions[questionIndex].myVal = choiceValue;
+                var my_val = 0;
+                for (var i = 0; i < questions.length; i++) {
+                    my_val += questions[i].myVal;
+                }
+                myScore[panelIndex] = my_val;                
+            }
+            else{ // 상대방 점수
+                questions[questionIndex].OtherVal = choiceValue;
+                var other_val = 0;
+                for (var i = 0; i < questions.length; i++) {
+                    other_val += questions[i].OtherVal;
+                }
+                OtherScore[panelIndex] = other_val;
+            }
+         
+            console.log(`MyScore : ${panelIndex} , ${myScore[panelIndex]}` );
+            console.log(`OtherScore : ${panelIndex} , ${OtherScore[panelIndex]}` );
+
+            if(idx == 1){  // 내 점수
+                return (my_val);
+            }
+            else{ // 상대방 점수
+                return (other_val);
+            }            
+        }
+
+        // 질문과 각 선택지에 대한 정보를 배열로 정의합니다.
+        // 생존욕구 index = 0
+        var live_questions = ["1. 생존의 욕구", [
+            { question: "1. 돈이나 물건을 절약하는가", myVal: 0, OtherVal: 0 },
+            { question: "2. 돈으로 살 수 있는 것에 각별한 만족을 느끼는가 ", myVal: 0, OtherVal: 0 },
+            { question: "3  자신의 건강유지에 관심을 가지고 있는가",  myVal: 0, OtherVal: 0 },
+            { question: "4. 균형 잡힌 식생활을 하려고 노력 하는가",  myVal: 0, OtherVal: 0 },
+            { question: "5. 성적인 관심을 많이 지니고 있는가",  myVal: 0, OtherVal: 0 },
+            { question: "6. 매사에 보수적인 편인가",  myVal: 0, OtherVal: 0 },
+            { question: "7. 안정된 미래를 위해 저축하거나 투자하는가",  myVal: 0, OtherVal: 0 },
+            { question: "8. 부득이한 경우가 아니면 모험을 피하고 싶은가",  myVal: 0, OtherVal: 0 },
+            { question: "9. 외모를 단정하게 가꾸는데 관심이 있는가 ",  myVal: 0, OtherVal: 0 },
+            { question: "10. 쓸 수 있는 물건은 버리지 않고 간직하는가",  myVal: 0, OtherVal: 0 }, ]];
+        
+        // 사랑욕구 index = 1
+        var love_questions = ["2. 사랑, 소속의 욕구", [
+            { question: "1. 나는 사랑과 친근감을 많이 필요로 하는가",  myVal: 0, OtherVal: 0 },
+            { question: "2. 다른 사람의 복지에 관심이 있는가 ",  myVal: 0, OtherVal: 0 },
+            { question: "3  타인을 위한 일에 시간을 내는가",  myVal: 0, OtherVal: 0 },
+            { question: "4. 장거리 여행 때 옆자리의 사람에게 말을 거는가",  myVal: 0, OtherVal: 0 },
+            { question: "5. 사람들과 함께 있는 것을 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "6. 아는 사람과는 가깝고 친밀하게 지내는가",  myVal: 0, OtherVal: 0 },
+            { question: "7. 배우자가 내게 관심을 가져주기 바라는가",  myVal: 0, OtherVal: 0 },
+            { question: "8. 다른 사람이 나를 좋아해 주기 바라는가",  myVal: 0, OtherVal: 0 },
+            { question: "9. 다른 사람에게 친절하게 대하는가",  myVal: 0, OtherVal: 0 },
+            { question: "10. 배우자가 나의 모든 것을 좋아해 주기 바라는가",  myVal: 0, OtherVal: 0 },]];
+
+        // 힘/성취 욕구 index = 2
+        var power = ["3. 힘,성취의 욕구",[
+            { question: "1. 내가 하는 가사나 직업에 대해 사람들로부터 인정받고 싶은가",  myVal: 0, OtherVal: 0 },
+            { question: "2. 다른 사람에게 충고나 조언을 잘 하는가 ",  myVal: 0, OtherVal: 0 },
+            { question: "3  다른 사람에게 무엇을 하라고 잘 지시 하는가",  myVal: 0, OtherVal: 0 },
+            { question: "4. 경제적으로 남보다 잘 살고 싶은가",  myVal: 0, OtherVal: 0 },
+            { question: "5. 사람들에게 칭찬 듣는 것을 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "6. 내 밑에서 일하는 사람이 문제가 있을 때 쉽게 해고하는가",  myVal: 0, OtherVal: 0 },
+            { question: "7. 내 분야에서 탁월한 사람이 되고 싶은가",  myVal: 0, OtherVal: 0 },
+            { question: "8. 어떤 집단에서든 지도자가 되고 싶은가",  myVal: 0, OtherVal: 0 },
+            { question: "9. 자신을 가치있는 인간이라고 느끼는가",  myVal: 0, OtherVal: 0 },
+            { question: "10. 내 성취와 재능을 자랑스럽게 여기는가",  myVal: 0, OtherVal: 0 },]];
+
+        // 자유욕구 index = 3
+        var freedom = ["4. 자유에 대한 욕구",[
+            { question: "1. 나는 사랑과 친근감을 많이 필요로 하는가",  myVal: 0, OtherVal: 0 },
+            { question: "2. 다른 사람의 복지에 관심이 있는가 ",  myVal: 0, OtherVal: 0 },
+            { question: "3  타인을 위한 일에 시간을 내는가",  myVal: 0, OtherVal: 0 },
+            { question: "4. 장거리 여행 때 옆자리의 사람에게 말을 거는가",  myVal: 0, OtherVal: 0 },
+            { question: "5. 사람들과 함께 있는 것을 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "6. 아는 사람과는 가깝고 친밀하게 지내는가",  myVal: 0, OtherVal: 0 },
+            { question: "7. 배우자가 내게 관심을 가져주기 바라는가",  myVal: 0, OtherVal: 0 },
+            { question: "8. 다른 사람이 나를 좋아해 주기 바라는가",  myVal: 0, OtherVal: 0 },
+            { question: "9. 다른 사람에게 친절하게 대하는가",  myVal: 0, OtherVal: 0 },
+            { question: "10. 배우자가 나의 모든 것을 좋아해 주기 바라는가",  myVal: 0, OtherVal: 0 },]];
+
+        // 즐거움욕구 index = 4
+        var happiness = ["5. 즐거움에 대한 욕구",[
+            { question: "1. 큰 소리로 웃기 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "2. 유머를 사용하거나 듣는 것이 즐거운가 ",  myVal: 0, OtherVal: 0 },
+            { question: "3  나 자신에 대해서도 웃을 때가 있는가",  myVal: 0, OtherVal: 0 },
+            { question: "4. 뭐든지 유익하고 새로운 것을 배우는 것이 즐거운가",  myVal: 0, OtherVal: 0 },
+            { question: "5. 흥미있는 게임이나 놀이를 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "6. 여행하기를 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "7. 독서하기를 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "8. 영화구경 가기를 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "9. 음악 감상하기를 좋아하는가",  myVal: 0, OtherVal: 0 },
+            { question: "10. 새로운 방식으로 일하거나 생각해 보는 것이 좋은가",  myVal: 0, OtherVal: 0 },]];
+
+        var wholeQ = [live_questions,love_questions,power,freedom,happiness];
+
+            // 함수 시작
+        function start(){
+            //displayQuestion(live_questions[1],live_questions[0]);
+            displayQuestion(wholeQ[0][1],wholeQ[0][0]);
+        }
+
+        //앞으로
+        function previousQuestion(){
+            if( panelIndex > 0 )
+            {
+                panelIndex--;
+                //QestionDisp(panelIndex);
+                displayQuestion(wholeQ[panelIndex][1], wholeQ[panelIndex][0]);
+            }
+        }
+        
+        //다음
+        function nextQuestion(){
+            
+            if( panelIndex < labels.length -1) 
+            {
+                panelIndex++;
+                displayQuestion(wholeQ[panelIndex][1], wholeQ[panelIndex][0]);
+            }
+        }
+
+        function displayQuestion(questions, ContentTitle) {
+            var QContainer = document.getElementById("questionContainer");
+            QContainer.innerHTML ="";
+            var scoreText = document.createElement("p");
+            scoreText.textContent = "5.언제나 그렇다 / 4.자주 그렇다 / 3.때때로 그렇다 / 2.별로 그렇지 않다 / 1.전혀 그렇지 않다";
+            QContainer.appendChild(scoreText);
+            var my_val, other_val;          
+
+            var resultTable = document.createElement("table");
+            resultTable.classList.add("table", "table-bordered");
+
+            // 타이틀
+            var titleRow = document.createElement("tr");
+            var titleCell = document.createElement("th");
+            titleCell.style.textAlign = "center"; // 가운데 정렬
+            titleCell.textContent = ContentTitle;
+            titleCell.style.border = "1px solid black"; // 검은색 테두리 적용
+            titleRow.appendChild(titleCell);
+
+            // 나 
+            var titleCell1 = document.createElement("th");
+            //titleCell1.setAttribute("colspan", "5"); // 4개의 컬럼을 병합
+            titleCell1.style.textAlign = "center"; // 가운데 정렬
+            titleCell1.textContent = "나";
+            titleCell1.style.border = "1px solid black"; // 검은색 테두리 적용
+            titleRow.appendChild(titleCell1);
+
+            // 상대방
+            var titleCell2 = document.createElement("th");
+            //titleCell2.setAttribute("colspan", "5"); // 4개의 컬럼을 병합
+            titleCell2.style.textAlign = "center"; // 가운데 정렬
+            titleCell2.textContent = "상대방";
+            titleCell2.style.border = "1px solid black"; // 검은색 테두리 적용
+            titleRow.appendChild(titleCell2);
+            titleRow.style.backgroundColor = "rgb(205, 224, 215)"; // 배경색 적용
+
+            resultTable.appendChild(titleRow);
+            QContainer.appendChild(resultTable);
+
+            var tbody = document.createElement("tbody");
+            // 질문과 선택지를 HTML 테이블의 행과 셀로 동적으로 추가합니다.
+            for (var i = 0; i < questions.length; i++) {
+                var question = questions[i];
+                var row = document.createElement("tr");
+                var questionCell = document.createElement("td");
+                questionCell.textContent = question.question;
+                row.appendChild(questionCell);
+
+                // 나의 점수
+                var choicesCell = document.createElement("td");
+                for (var j = 0; j < choices.length; j++) {                   
+                    var choiceInput = document.createElement("input");
+                    choiceInput.type = "radio";
+                    choiceInput.style.marginRight ="2px";
+                    choiceInput.name = "MyQuestion" + i;
+                    choiceInput.value = choices[j];
+                    choiceInput.addEventListener("click", (function (qIndex, cIndex) {
+                        return function () {
+                            var my_val = selectAnswer(qIndex, cIndex, 1, questions);
+                            console.log(`my_val : ${my_val}`);
+                            var my_sum = document.getElementById("MySum");
+                            my_sum.innerHTML = my_val;
+                        };
+                    })(i, j));
+
+                    //체크한 내역을 다시 보여준다.
+                    if(question.myVal == choices[j]){
+                        choiceInput.checked = true;
+                    }
+
+                    var choiceLabel = document.createElement("label");
+                    choiceLabel.style.width = "40px";
+                    choiceLabel.appendChild(choiceInput);
+                    choiceLabel.appendChild(document.createTextNode( choices[j] ));
+                    choicesCell.appendChild(choiceLabel);
+                    choicesCell.style.backgroundColor = "rgb(254, 250, 212)"; // 연한 노란색 배경 적용
+                    row.appendChild(choicesCell);
+                }
+
+                // 상대방의 점수
+                var choicesCell = document.createElement("td");
+                for (var j = 0; j < choices.length; j++) {
+                    var choiceInput = document.createElement("input");
+                    choiceInput.type = "radio";
+                    choiceInput.name = "OtherQuestion" + i;
+                    choiceInput.value = choices[j];
+                    choiceInput.style.marginRight ="2px";
+                    choiceInput.addEventListener("click", (function (qIndex, cIndex) {
+                        return function () {
+                            var other_val = selectAnswer(qIndex, cIndex, 2, questions);
+                            console.log(`other_val : ${other_val}`);
+                            var other_sum = document.getElementById("OtherSum");
+                            other_sum.innerHTML = other_val;
+                        };
+                    })(i, j));
+                    //체크한 내역을 다시 보여준다.
+                    if(question.OtherVal == choices[j]){
+                        choiceInput.checked = true;
+                    }
+
+                    var choiceLabel = document.createElement("label");
+                    choiceLabel.style.width = "40px";
+                    choiceLabel.appendChild(choiceInput);
+                    choiceLabel.appendChild(document.createTextNode( choices[j]));
+                    choicesCell.style.backgroundColor = "rgb(245, 245, 255)"; // 연한 하늘색
+                    choicesCell.appendChild(choiceLabel);
+                    row.appendChild(choicesCell);
+                }
+                tbody.appendChild(row);
+                resultTable.appendChild(tbody);  
+            }
+            var row = document.createElement("tr");
+            var questionCell = document.createElement("td");
+            questionCell.textContent = "합계";
+            row.appendChild(questionCell);
+            var questionCell1 = document.createElement("td");
+            questionCell1.id = "MySum";
+            questionCell1.textContent = myScore[panelIndex];
+            row.appendChild(questionCell1);
+            var questionCell2 = document.createElement("td");
+            questionCell2.id = "OtherSum";
+            questionCell2.textContent = OtherScore[panelIndex];
+            row.appendChild(questionCell2);
+            tbody.appendChild(row);
+            resultTable.appendChild(tbody);  
+            QContainer.appendChild(resultTable);
+        }
+
+        function displayGraph() {
+            var canvas = document.getElementById("DesireChart");
+            // Chart 생성 또는 업데이트
+            if (chart) {
+                 // 데이터 업데이트
+                chart.data.datasets[0].data = myScore;
+                chart.data.datasets[1].data = OtherScore;
+                chart.update(); // 그래프 업데이트
+            } else {
+                // 그래프 그리기
+                var ctx = canvas.getContext('2d');
+                chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                    {
+                        label: '내 점수',
+                        data: myScore,
+                        borderColor: 'blue',
+                        borderDash: [5, 5], // 점선 효과 설정
+                        fill: false
+                    },
+                    {
+                        label: '상대방',
+                        data: OtherScore,
+                        borderColor: 'red',
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 5,
+                        max: 50
+                        }
+                    },
+                    plugins: {
+                    title: {
+                        display: true,
+                        text: '욕구 강도 프로파일'
+                        }
+                    }
+                }
+                });
+            }
+        }
+        // 그래프 출력 함수
+        function printChart() {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.open();
+            printWindow.document.write('<html><head><title>욕구 강도 프로파일</title></head><body>');
+            printWindow.document.write('<img src="' + DesireChart.toBase64Image() + '">');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>욕구강도 프로파일  진단</h1>
+        <div id="questionContainer" class="question-Container"> 
+            <table id="displayTable" class="container text-center"></table>
+        </div>
+        <div class="question-Container">
+        <div>
+            <button class="btn btn-primary" onclick="previousQuestion()">앞으로</button>
+            <button class="btn btn-primary" onclick="nextQuestion()">다음</button>
+            <button class="btn btn-primary" onclick="displayGraph()">그리기</button>             
+        </div> 
+        <div class="Close-Container" >
+            <!-- <button type="button" class="btn btn-primary btn-sm" onclick="printChart()">Print</button> -->
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.close()">Close</button>
+        </div>
+        </div>
+        <canvas id="DesireChart"></canvas>
+
+    </div>
+    <script>
+        start();
+
+    </script>
+</body>
+</html>
